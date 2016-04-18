@@ -52,7 +52,7 @@ public class Main {
 
 	public static File findReadFile(String[] list) {
 		for (String name : list) {
-			if (name.indexOf("output") == -1) {
+			if (!name.contains("output")) {
 				return new File("textFile/" + name);
 			}
 		}
@@ -73,7 +73,7 @@ public class Main {
 	public static Boolean checkNumFile(String[] list) {
 		int length = list.length;
 		for (String name : list) {
-			if (name.indexOf("output") != -1) length--;
+			if (name.contains("output")) length--;
 		}
 
 		return length == 1;
@@ -125,7 +125,7 @@ public class Main {
 			write.close();
 		} catch (IOException e) {
 			System.out.println("File No found by some reason.");
-			System.out.println(e);
+			e.printStackTrace();
 		}
 	}
 }

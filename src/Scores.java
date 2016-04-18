@@ -126,7 +126,7 @@ public class Scores {
 			write.close();
 		} catch (IOException e) {
 			System.out.println("File No found by some reason.");
-			System.out.println(e);
+			e.printStackTrace();
 		}
 
 	}
