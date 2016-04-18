@@ -1,9 +1,12 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 /**
  * Created by kamontat on 13/4/59.
  *
- * @version 1.5
+ * @version 1.8
  */
 public class Scores {
 	private ArrayList<double[]> data = new ArrayList<>();
@@ -98,20 +101,31 @@ public class Scores {
 	}
 
 	/**
-	 * print data in form of table
+	 * show up data in form of table on 'Output file'
 	 */
-	public void printData() {
-		System.out.println("------------------------");
-		System.out.printf("|%7s|| %12s|\n", "Number", "Scores");
-		System.out.println("------------------------");
-		for (int i = 0; i < length; i++) {
-			System.out.printf("|%7.0f|| %12.2f|\n", data.get(i)[0], data.get(i)[1]);
+	public void addDataTo(File file) {
+		try {
+			FileWriter write = new FileWriter(file);
+
+			String message1 = "------------------------";
+			String scoreText = "";
+			for (int i = 0; i < length; i++) {
+				scoreText += String.format("|%7.0f|| %12.2f|\n", data.get(i)[0], data.get(i)[1]);
+			}
+
+			String output = String.format("%s\n|%7s|| %12s|\n%s\n", message1, "Number", "Scores", message1); // title
+			output += String.format("%s%s\n", scoreText, message1); // list of scores
+			output += String.format("|%7s|| %12.4f|\n", "Range", range); // range
+			output += String.format("|%7s|| %12.4f|\n", "Average", average); // average
+			output += String.format("|%7s|| %12.4f|\n", "S.D.", SD); // S.D.
+			output += String.format("%s\n", message1); // close line
+
+			write.write(output);
+			write.close();
+		} catch (IOException e) {
+			System.out.println("File No found by some reason.");
+			System.out.println(e);
 		}
-		System.out.println("------------------------");
-		System.out.printf("|%7s|| %12.4f|\n", "Range", range);
-		System.out.printf("|%7s|| %12.4f|\n", "Average", average);
-		System.out.printf("|%7s|| %12.4f|\n", "S.D.", SD);
-		System.out.println("------------------------\n");
 
 	}
 }
