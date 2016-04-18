@@ -6,13 +6,13 @@ import java.util.*;
 /**
  * Created by kamontat on 13/4/59.
  *
- * @version 1.8
+ * @version 1.9
  */
 public class Scores {
 	private ArrayList<double[]> data = new ArrayList<>();
-	private int length;
 
-	public double average, SD, range;
+	private int length;
+	private double average, SD, range;
 
 	public Scores(ArrayList<double[]> scores) {
 		for (double[] score : scores) {
@@ -115,6 +115,8 @@ public class Scores {
 
 			String output = String.format("%s\n|%7s|| %12s|\n%s\n", message1, "Number", "Scores", message1); // title
 			output += String.format("%s%s\n", scoreText, message1); // list of scores
+			output += String.format("|%7s|| %12d|\n", "Total", length); // total number student
+			output += String.format("%s\n", message1); // close line
 			output += String.format("|%7s|| %12.4f|\n", "Range", range); // range
 			output += String.format("|%7s|| %12.4f|\n", "Average", average); // average
 			output += String.format("|%7s|| %12.4f|\n", "S.D.", SD); // S.D.

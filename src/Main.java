@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Created by kamontat on 12/4/59.
  *
- * @version 0.3.1
+ * @version 0.3.2
  */
 public class Main {
 	/**
@@ -46,6 +46,8 @@ public class Main {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		// log
+		System.out.println("\n\nProgram run successful. \nCode by Kamontat SKE 13.");
 	}
 
 	public static File findReadFile(String[] list) {
@@ -99,12 +101,14 @@ public class Main {
 		String outputName = "outputFile";
 		File newFile = new File("textFile/" + outputName + ".txt");
 		while (!newFile.createNewFile()) {
+			newFile = new File("textFile/" + outputName + countFile++ + ".txt");
+
 			// limit only 4 output file
-			if (countFile == 4) {
+			if (countFile == 5) {
 				deleteFile(new String[]{outputName + ".txt", outputName + "1.txt", outputName + "2.txt", outputName + "3.txt"});
+				newFile = new File("textFile/" + outputName + ".txt");
 				countFile = 1;
 			}
-			newFile = new File("textFile/" + outputName + countFile++ + ".txt");
 		}
 		return newFile;
 	}
