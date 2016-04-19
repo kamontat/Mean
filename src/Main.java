@@ -25,11 +25,12 @@ public class Main {
 				// if has one file run in normal way
 				if (checkNumFile(fileList)) {
 					// add score from file text to File
-					addScoreTo(findReadFile(fileList));
+					File readFile = findReadFile(fileList);
+					addScoreTo(readFile);
 					// log
 					System.out.println("Scan will be stop now.");
 
-					Scores score = new Scores(scores);
+					Scores score = new Scores(readFile, scores);
 					score.addDataTo(createOutputFile());
 				} else {
 					// delete unused file

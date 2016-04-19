@@ -6,19 +6,21 @@ import java.util.*;
 /**
  * Created by kamontat on 13/4/59.
  *
- * @version 1.9
+ * @version 2.0
  */
 public class Scores {
 	private ArrayList<double[]> data = new ArrayList<>();
 
+	private String fileName;
 	private int length;
 	private double average, SD, range;
 
-	public Scores(ArrayList<double[]> scores) {
+	public Scores(File file, ArrayList<double[]> scores) {
 		for (double[] score : scores) {
 			this.data.add(score);
 		}
 		this.length = scores.size();
+		this.fileName = file.getName();
 
 		// sort data
 		sortData();
@@ -28,6 +30,8 @@ public class Scores {
 		standardDeviation();
 		// range
 		range();
+
+		System.out.println("I read file name: " + fileName);
 	}
 
 	/**
@@ -107,19 +111,20 @@ public class Scores {
 		try {
 			FileWriter write = new FileWriter(file);
 
-			String message1 = "------------------------";
+			String message1 = "----------------------------";
 			String scoreText = "";
 			for (int i = 0; i < length; i++) {
-				scoreText += String.format("|%7.0f|| %12.2f|\n", data.get(i)[0], data.get(i)[1]);
+				scoreText += String.format("|%3d|%7.0f|| %12.2f|\n", (i + 1), data.get(i)[0], data.get(i)[1]);
 			}
 
-			String output = String.format("%s\n|%7s|| %12s|\n%s\n", message1, "Number", "Scores", message1); // title
+			String output = "File Name: " + fileName + "\n\n";
+			output += String.format("%s\n|%s|%7s|| %12s|\n%s\n", message1, "###", "Number", "Scores", message1); // title
 			output += String.format("%s%s\n", scoreText, message1); // list of scores
-			output += String.format("|%7s|| %12d|\n", "Total", length); // total number student
+			output += String.format("|%11s|| %12d|\n", "Total", length); // total number student
 			output += String.format("%s\n", message1); // close line
-			output += String.format("|%7s|| %12.4f|\n", "Range", range); // range
-			output += String.format("|%7s|| %12.4f|\n", "Average", average); // average
-			output += String.format("|%7s|| %12.4f|\n", "S.D.", SD); // S.D.
+			output += String.format("|%11s|| %12.4f|\n", "Range", range); // range
+			output += String.format("|%11s|| %12.4f|\n", "Average", average); // average
+			output += String.format("|%11s|| %12.4f|\n", "S.D.", SD); // S.D.
 			output += String.format("%s\n", message1); // close line
 
 			write.write(output);
