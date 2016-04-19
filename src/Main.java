@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Created by kamontat on 12/4/59.
  *
- * @version 0.4.0
+ * @version 0.4.6
  */
 public class Main {
 	/**
@@ -17,9 +17,10 @@ public class Main {
 	static ArrayList<double[]> scores = new ArrayList<>();
 
 	public static void main(String[] args) {
-		File folder = new File("inputFolder/");
 		try {
 			if (!createNewFolder("inputFolder")) {
+				File folder = new File("inputFolder/");
+
 				String[] fileList = folder.list();
 				fileList = listReadFile(fileList);
 				// log
@@ -39,8 +40,6 @@ public class Main {
 					score.addDataTo(createOutputFile());
 				}
 			} else {
-				System.out.println("Folder \"inputFolder/\" not found.");
-				System.out.println("Program has create new \'Folder\' called: inputFolder");
 				createNewFile("readFile");
 			}
 		} catch (Exception e) {
@@ -58,7 +57,7 @@ public class Main {
 			String fileName = scanner.nextLine() + ".txt";
 			// check name in list
 			for (String name : list) {
-				if (fileName.equals(name)) return new File("inputFolder/" + fileName);
+				if (fileName.contains(name)) return new File("inputFolder/" + name);
 			}
 
 		} while (true);
@@ -83,9 +82,19 @@ public class Main {
 		return newList.toArray(new String[newList.size()]);
 	}
 
-	public static void deleteFile(String[] fileNames) {
+	public static void deleteFile(String folder, String[] fileNames) {
 		for (String fileName : fileNames) {
-			File unnecessaryFile = new File("inputFolder/" + fileName);
+			File unnecessaryFile = new File(folder + "/" + fileName);
+			if (unnecessaryFile.delete()) System.out.println("Program has deleted File name: " + fileName);
+			else System.out.println("No " + fileName + "file exist, Any more");
+		}
+	}
+
+	public static void deleteFileIn(String folder) {
+		File file = new File(folder + "/");
+		String[] fileNames = file.list();
+		for (String fileName : fileNames) {
+			File unnecessaryFile = new File(folder + "/" + fileName);
 			if (unnecessaryFile.delete()) System.out.println("Program has deleted File name: " + fileName);
 			else System.out.println("No " + fileName + "file exist, Any more");
 		}
@@ -116,17 +125,18 @@ public class Main {
 		int countFile = 1;
 		String outputName = "outputFile";
 
+		createNewFolder("outputFolder");
 
+		File newFile = new File("outputFolder/" + outputName + countFile + ".txt");
 
-		File newFile = new File("inputFolder/" + outputName + ".txt");
 		while (!newFile.createNewFile()) {
-			newFile = new File("inputFolder/" + outputName + countFile++ + ".txt");
+			newFile = new File("outputFolder/" + outputName + ++countFile + ".txt");
 
-			// limit only 4 output file
-			if (countFile == 5) {
-				deleteFile(new String[]{outputName + ".txt", outputName + "1.txt", outputName + "2.txt", outputName + "3.txt"});
-				newFile = new File("inputFolder/" + outputName + ".txt");
+			// limit only 9 output file
+			if (countFile == 10) {
 				countFile = 1;
+				deleteFileIn("outputFolder");
+				newFile = new File("outputFolder/" + outputName + countFile + ".txt");
 			}
 		}
 		return newFile;
@@ -134,7 +144,9 @@ public class Main {
 
 	/**
 	 * write in description in new file. (What kind of text user must put into text file)
-	 * @param file textFile.
+	 *
+	 * @param file
+	 * 		textFile.
 	 */
 	public static void writeFile(File file) {
 		try {

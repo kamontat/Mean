@@ -6,7 +6,7 @@ import java.util.*;
 /**
  * Created by kamontat on 13/4/59.
  *
- * @version 2.0
+ * @version 2.1
  */
 public class Scores {
 	private ArrayList<double[]> data = new ArrayList<>();
@@ -120,11 +120,11 @@ public class Scores {
 			String output = "File Name: " + fileName + "\n\n";
 			output += String.format("%s\n|%s|%7s|| %12s|\n%s\n", message1, "###", "Number", "Scores", message1); // title
 			output += String.format("%s%s\n", scoreText, message1); // list of scores
-			output += String.format("|%11s|| %12d|\n", "Total", length); // total number student
+			output += String.format("|%-11s|| %12d|\n", "Total", length); // total number student
 			output += String.format("%s\n", message1); // close line
-			output += String.format("|%11s|| %12.4f|\n", "Range", range); // range
-			output += String.format("|%11s|| %12.4f|\n", "Average", average); // average
-			output += String.format("|%11s|| %12.4f|\n", "S.D.", SD); // S.D.
+			output += String.format("|%-11s|| %12.4f|\n", "Range", range); // range
+			output += String.format("|%-11s|| %12.4f|\n", "Average", average); // average
+			output += String.format("|%-11s|| %12.4f|\n", "S.D.", SD); // S.D.
 			output += String.format("%s\n", message1); // close line
 
 			write.write(output);
