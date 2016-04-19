@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Created by kamontat on 12/4/59.
  *
- * @version 0.3.2
+ * @version 0.4.0
  */
 public class Main {
 	/**
@@ -17,13 +17,18 @@ public class Main {
 	static ArrayList<double[]> scores = new ArrayList<>();
 
 	public static void main(String[] args) {
-		File folder = new File("textFile/");
+		File folder = new File("inputFolder/");
 		try {
 			if (!folder.mkdir()) {
 				String[] fileList = folder.list();
+				fileList = listReadFile(fileList);
+				// log
+				System.out.println(Arrays.toString(fileList));
 
-				// if has one file run in normal way
-				if (checkNumFile(fileList)) {
+				if (fileList.length == 0) {
+					createNewFile();
+				} else {
+					// if has one file run in normal way
 					// add score from file text to File
 					File readFile = findReadFile(fileList);
 					addScoreTo(readFile);
@@ -32,16 +37,10 @@ public class Main {
 
 					Scores score = new Scores(readFile, scores);
 					score.addDataTo(createOutputFile());
-				} else {
-					// delete unused file
-					deleteFile(fileList);
-					// create the new one
-					createNewFile();
 				}
 			} else {
-				System.out.println("Folder \"textFile/\" not found.");
-
-				System.out.println("Program has create new \'Folder\' called: textFile");
+				System.out.println("Folder \"inputFolder/\" not found.");
+				System.out.println("Program has create new \'Folder\' called: inputFolder");
 				createNewFile();
 			}
 		} catch (Exception e) {
@@ -52,13 +51,17 @@ public class Main {
 	}
 
 	public static File findReadFile(String[] list) {
-		for (String name : list) {
-			if (!name.contains("output")) {
-				return new File("textFile/" + name);
+		Scanner scanner = new Scanner(System.in);
+
+		do {
+			System.out.print("Which File you want to read?? : ");
+			String fileName = scanner.nextLine() + ".txt";
+			// check name in list
+			for (String name : list) {
+				if (fileName.equals(name)) return new File("inputFolder/" + fileName);
 			}
-		}
-		System.err.println("This print shouldn't show up");
-		return null;
+
+		} while (true);
 	}
 
 	public static void addScoreTo(File file) throws FileNotFoundException {
@@ -71,25 +74,25 @@ public class Main {
 		}
 	}
 
-	public static Boolean checkNumFile(String[] list) {
-		int length = list.length;
+	public static String[] listReadFile(String[] list) {
+		ArrayList<String> newList = new ArrayList<String>();
 		for (String name : list) {
-			if (name.contains("output")) length--;
+			if (!name.contains("output")) newList.add(name);
 		}
 
-		return length == 1;
+		return newList.toArray(new String[newList.size()]);
 	}
 
 	public static void deleteFile(String[] fileNames) {
 		for (String fileName : fileNames) {
-			File unnecessaryFile = new File("textFile/" + fileName);
+			File unnecessaryFile = new File("inputFolder/" + fileName);
 			if (unnecessaryFile.delete()) System.out.println("Program has deleted File name: " + fileName);
 			else System.out.println("No " + fileName + "file exist, Any more");
 		}
 	}
 
 	public static void createNewFile() throws IOException {
-		File newFile = new File("textFile/readFile.txt");
+		File newFile = new File("inputFolder/readFile.txt");
 		if (newFile.createNewFile()) {
 			writeFile(newFile);
 			System.out.println("\nProgram has create new \'File\' called: readFile.txt, ");
@@ -100,14 +103,14 @@ public class Main {
 	public static File createOutputFile() throws IOException {
 		int countFile = 1;
 		String outputName = "outputFile";
-		File newFile = new File("textFile/" + outputName + ".txt");
+		File newFile = new File("inputFolder/" + outputName + ".txt");
 		while (!newFile.createNewFile()) {
-			newFile = new File("textFile/" + outputName + countFile++ + ".txt");
+			newFile = new File("inputFolder/" + outputName + countFile++ + ".txt");
 
 			// limit only 4 output file
 			if (countFile == 5) {
 				deleteFile(new String[]{outputName + ".txt", outputName + "1.txt", outputName + "2.txt", outputName + "3.txt"});
-				newFile = new File("textFile/" + outputName + ".txt");
+				newFile = new File("inputFolder/" + outputName + ".txt");
 				countFile = 1;
 			}
 		}
