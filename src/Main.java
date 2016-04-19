@@ -7,7 +7,7 @@ import java.util.*;
 /**
  * Created by kamontat on 12/4/59.
  *
- * @version 0.4.6
+ * @version 0.5.1
  */
 public class Main {
 	/**
@@ -19,28 +19,40 @@ public class Main {
 	public static void main(String[] args) {
 		try {
 			if (!createNewFolder("inputFolder")) {
-				File folder = new File("inputFolder/");
+				Boolean answer = true;
+				while (answer) {
+					File folder = new File("inputFolder/");
 
-				String[] fileList = folder.list();
-				fileList = listReadFile(fileList);
-				// log
-				System.out.println(Arrays.toString(fileList));
-
-				if (fileList.length == 0) {
-					createNewFile("readFile");
-				} else {
-					// if has one file run in normal way
-					// add score from file text to File
-					File readFile = findReadFile(fileList);
-					addScoreTo(readFile);
+					String[] fileList = folder.list();
+					fileList = listReadFile(fileList);
 					// log
-					System.out.println("Scan will be stop now.");
+					System.out.println(Arrays.toString(fileList));
 
-					Scores score = new Scores(readFile, scores);
-					score.addDataTo(createOutputFile());
+					if (fileList.length == 0) {
+						createInputFile("readFile");
+					} else {
+						// if has one file run in normal way
+						// add score from file text to File
+						File readFile = findReadFile(fileList);
+						addScoreBy(readFile);
+						// log
+						System.out.println("Scan will be stop now.");
+
+						Scores score = new Scores(readFile, scores);
+						score.addDataTo(outputFile());
+					}
+
+					Scanner scanner = new Scanner(System.in);
+					System.out.print("Do you want in calculate again(Y/N)?  ");
+					String input = scanner.nextLine();
+					// check answer if user input "no" or "n"
+					answer = !(input.equalsIgnoreCase("n") || input.equalsIgnoreCase("no"));
+					if (answer) {
+						scores = new ArrayList<>();
+					}
 				}
 			} else {
-				createNewFile("readFile");
+				createInputFile("readFile");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -63,7 +75,7 @@ public class Main {
 		} while (true);
 	}
 
-	public static void addScoreTo(File file) throws FileNotFoundException {
+	public static void addScoreBy(File file) throws FileNotFoundException {
 		Scanner scan = new Scanner(file);
 		int count = 1;
 		// put numStudent, score in scores(Array)
@@ -112,7 +124,7 @@ public class Main {
 	/**
 	 * create new file in <b>inputFolder</b>.
 	 */
-	public static void createNewFile(String name) throws IOException {
+	public static void createInputFile(String name) throws IOException {
 		File newFile = new File("inputFolder/" + name + ".txt");
 		if (newFile.createNewFile()) {
 			writeFile(newFile);
@@ -121,7 +133,7 @@ public class Main {
 		}
 	}
 
-	public static File createOutputFile() throws IOException {
+	public static File outputFile() throws IOException {
 		int countFile = 1;
 		String outputName = "outputFile";
 
