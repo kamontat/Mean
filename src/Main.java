@@ -19,14 +19,14 @@ public class Main {
 	public static void main(String[] args) {
 		File folder = new File("inputFolder/");
 		try {
-			if (!folder.mkdir()) {
+			if (!createNewFolder("inputFolder")) {
 				String[] fileList = folder.list();
 				fileList = listReadFile(fileList);
 				// log
 				System.out.println(Arrays.toString(fileList));
 
 				if (fileList.length == 0) {
-					createNewFile();
+					createNewFile("readFile");
 				} else {
 					// if has one file run in normal way
 					// add score from file text to File
@@ -41,7 +41,7 @@ public class Main {
 			} else {
 				System.out.println("Folder \"inputFolder/\" not found.");
 				System.out.println("Program has create new \'Folder\' called: inputFolder");
-				createNewFile();
+				createNewFile("readFile");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -91,8 +91,20 @@ public class Main {
 		}
 	}
 
-	public static void createNewFile() throws IOException {
-		File newFile = new File("inputFolder/readFile.txt");
+	public static Boolean createNewFolder(String name) {
+		File folder = new File(name + "/");
+		if (folder.mkdir()) {
+			System.out.println(name + " folder has been created");
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * create new file in <b>inputFolder</b>.
+	 */
+	public static void createNewFile(String name) throws IOException {
+		File newFile = new File("inputFolder/" + name + ".txt");
 		if (newFile.createNewFile()) {
 			writeFile(newFile);
 			System.out.println("\nProgram has create new \'File\' called: readFile.txt, ");
@@ -103,6 +115,9 @@ public class Main {
 	public static File createOutputFile() throws IOException {
 		int countFile = 1;
 		String outputName = "outputFile";
+
+
+
 		File newFile = new File("inputFolder/" + outputName + ".txt");
 		while (!newFile.createNewFile()) {
 			newFile = new File("inputFolder/" + outputName + countFile++ + ".txt");
@@ -117,6 +132,10 @@ public class Main {
 		return newFile;
 	}
 
+	/**
+	 * write in description in new file. (What kind of text user must put into text file)
+	 * @param file textFile.
+	 */
 	public static void writeFile(File file) {
 		try {
 			FileWriter write = new FileWriter(file);
