@@ -33,17 +33,21 @@ public class Main {
 					} else {
 						// if has one file run in normal way
 						// add score from file text to File
-						File readFile = findReadFile(fileList);
-						addScoreBy(readFile);
-						// log
-						System.out.println("Scan will be stop now.");
+						File[] files = findReadFile(fileList);
 
-						Scores score = new Scores(readFile, scores);
-						score.addDataTo(outputFile());
+						// if user don't input something
+						if (files == null) throw new FileNotFoundException();
+
+						for (File file : files) {
+							addScoreBy(file);
+							Scores score = new Scores(file, scores);
+							score.addDataTo(outputFile());
+							resetScores();
+						}
 					}
 
 					Scanner scanner = new Scanner(System.in);
-					System.out.print("Do you want in calculate again(Y/N)?  ");
+					System.out.print("\nDo you want in calculate again(Y/N)?  ");
 					String input = scanner.nextLine();
 					// check answer if user input "no" or "n"
 					answer = !(input.equalsIgnoreCase("n") || input.equalsIgnoreCase("no"));
@@ -61,32 +65,35 @@ public class Main {
 		System.out.println("\n\nProgram run successful. \nCode by Kamontat SKE 13.");
 	}
 
-	public static File findReadFile(String[] list) {
+	public static File[] findReadFile(String[] list) {
+		ArrayList<File> files = new ArrayList<>();
 		Scanner scanner = new Scanner(System.in);
 
-		do {
-			System.out.print("Which File you want to read?? : ");
-			String fileName = scanner.nextLine() + ".txt";
-			// check name in list
-			for (String name : list) {
-				if (fileName.contains(name)) return new File("inputFolder/" + name);
-			}
+		System.out.print("Which File you want to read?? : ");
+		String filesName = scanner.nextLine().trim();
 
-		} while (true);
-	}
+		// break if no input
+		if (filesName.isEmpty()) return null;
 
-	public static void addScoreBy(File file) throws FileNotFoundException {
-		Scanner scan = new Scanner(file);
-		int count = 1;
-		// put numStudent, score in scores(Array)
-		while (scan.hasNext()) {
-			// for 2 decimal double number
-			scores.add(new double[]{count++, scan.nextDouble()});
+		// split in the whitespace
+		String[] nameList = filesName.split("\\s+");
+
+		// add txt in each file name
+		for (int i = 0; i < nameList.length; i++) {
+			nameList[i] += nameList[i] + ".txt";
 		}
+
+		// check name in list
+		for (String fileName : nameList) {
+			for (String name : list) {
+				if (fileName.contains(name)) files.add(new File("inputFolder/" + name));
+			}
+		}
+		return files.toArray(new File[files.size()]);
 	}
 
 	public static String[] listReadFile(String[] list) {
-		ArrayList<String> newList = new ArrayList<String>();
+		ArrayList<String> newList = new ArrayList<>();
 		for (String name : list) {
 			if (!name.contains("output")) newList.add(name);
 		}
@@ -94,7 +101,7 @@ public class Main {
 		return newList.toArray(new String[newList.size()]);
 	}
 
-	public static void deleteFile(String folder, String[] fileNames) {
+	public static void deleteFileIn(String folder, String[] fileNames) {
 		for (String fileName : fileNames) {
 			File unnecessaryFile = new File(folder + "/" + fileName);
 			if (unnecessaryFile.delete()) System.out.println("Program has deleted File name: " + fileName);
@@ -133,6 +140,12 @@ public class Main {
 		}
 	}
 
+	/**
+	 * Max output that this method can create is 9
+	 *
+	 * @return output file in output folder
+	 * @throws IOException
+	 */
 	public static File outputFile() throws IOException {
 		int countFile = 1;
 		String outputName = "outputFile";
@@ -174,5 +187,19 @@ public class Main {
 			System.out.println("File No found by some reason.");
 			e.printStackTrace();
 		}
+	}
+
+	public static void addScoreBy(File file) throws FileNotFoundException {
+		Scanner scan = new Scanner(file);
+		int count = 1;
+		// put numStudent, score in scores(Array)
+		while (scan.hasNext()) {
+			// for 2 decimal double number
+			scores.add(new double[]{count++, scan.nextDouble()});
+		}
+	}
+
+	public static void resetScores() {
+		scores.removeAll(new ArrayList<Double[]>());
 	}
 }
