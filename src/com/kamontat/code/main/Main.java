@@ -1,3 +1,7 @@
+package com.kamontat.code.main;
+
+import com.kamontat.code.object.Scores;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;

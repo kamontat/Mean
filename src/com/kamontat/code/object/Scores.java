@@ -1,3 +1,5 @@
+package com.kamontat.code.object;
+
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -118,7 +120,7 @@ public class Scores {
 			}
 
 			String output = "File Name: " + fileName + "\n\n";
-			output += String.format("%s\n|%s|%7s|| %12s|\n%s\n", message1, "###", "Number", "Scores", message1); // title
+			output += String.format("%s\n|%s|%7s|| %12s|\n%s\n", message1, "###", "Number", "scores", message1); // title
 			output += String.format("%s%s\n", scoreText, message1); // list of scores
 			output += String.format("|%-11s|| %12d|\n", "Total", length); // total number student
 			output += String.format("%s\n", message1); // close line
