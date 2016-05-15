@@ -135,6 +135,5 @@ public class Scores {
 			System.out.println("File No found by some reason.");
 			e.printStackTrace();
 		}
-
 	}
 }
